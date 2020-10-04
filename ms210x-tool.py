@@ -10,6 +10,21 @@ from devices import ms2109
 def status(device, args):
     device.status()
 
+    hotplug_detect = device.read_xdata_byte(0xF839)
+    res_width = device.read_xdata_byte(0xC572) << 8 | (device.read_xdata_byte(0xC573))
+    res_height = device.read_xdata_byte(0xC574) << 8 | (device.read_xdata_byte(0xC575))
+    signal_byte = device.read_xdata_byte(0xC568)
+
+    print("Hotplug status:", hotplug_detect)
+    if signal_byte == 0:
+        print("Signal: no")
+    elif signal_byte == 128:
+        print("Signal: present")
+    else:
+        print("Signal: ?")
+
+    print("Native resolution:", res_width, res_height)
+
 
 def outout_data(data, output, show_addresses=False):
     if output:
