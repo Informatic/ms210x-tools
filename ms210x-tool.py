@@ -13,6 +13,9 @@ def status(device, args):
     hotplug_detect = device.read_xdata_byte(0xF839)
     res_width = device.read_xdata_byte(0xC572) << 8 | (device.read_xdata_byte(0xC573))
     res_height = device.read_xdata_byte(0xC574) << 8 | (device.read_xdata_byte(0xC575))
+    video_rate = (
+        device.read_xdata_byte(0xC578) << 8 | (device.read_xdata_byte(0xC579))
+    ) / 100.0
     signal_byte = device.read_xdata_byte(0xC568)
 
     print("Hotplug status:", hotplug_detect)
@@ -23,7 +26,7 @@ def status(device, args):
     else:
         print("Signal: ?")
 
-    print("Native resolution:", res_width, res_height)
+    print("Native video mode: %dx%d@%.1f" % (res_width, res_height, video_rate))
 
 
 def outout_data(data, output, show_addresses=False):
